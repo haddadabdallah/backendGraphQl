@@ -1,0 +1,35 @@
+
+
+type User {
+    email: String
+    password: String
+  }
+
+  type Query {
+    users: [User]
+  }
+
+   type LoginResponse {
+     code:Int!
+     Success:Boolean!
+     message:String!
+    email: String
+    token: String
+    status: Boolean
+  }
+
+  type SignupResponse {
+     code:Int!
+     Success:Boolean!
+     message:String!
+     email: String
+     password: String
+     status: Boolean
+  }
+
+  type Mutation {
+      signup(email: String, password: String) : SignupResponse
+      login(email: String, password:String) : LoginResponse
+  }
+
+ 
