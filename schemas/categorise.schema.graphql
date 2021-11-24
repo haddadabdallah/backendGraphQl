@@ -1,0 +1,26 @@
+
+type categorie {
+    id: String
+    name: String
+    slug: String
+    status: Boolean
+}
+
+type Query {
+    categorises: [categorie]
+}
+
+type categorieResponse  {
+    code: Int
+    success: Boolean
+    message: String
+    categories: [categorie]
+}
+
+type Mutation {
+
+    addCategorie(name: String, slug: String, status: Boolean) : categorieResponse
+    updateCategorie(id: String, name: String, slug: String  status: Boolean) : categorieResponse
+    removeCategorie(id:String): categorieResponse
+
+}

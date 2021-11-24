@@ -1,0 +1,40 @@
+type product {
+    id: String
+    name: String
+    slug: String
+    photo: String
+    prix: String
+    categorie: categorie
+}
+
+type productsResponse  {
+    id: String
+    code: Int
+    success: Boolean
+    message: String
+    products: [product]
+}
+
+type productResponse  {
+    id: String
+    code: Int
+    success: Boolean
+    message: String
+    product: product
+}
+
+
+
+type Query {
+    products(page:Int, categorie: String ): productsResponse
+    product(id:String): productResponse
+}
+
+
+type Mutation {
+   
+    addProduct(id: String, name: String,slug: String, photo:String, prix:String, categorie:String) : productsResponse,
+    updateProduct(id: String, name: String,slug: String, photo:String, prix:String, categorie:String) : productsResponse
+    deleteProduct(id: String,) : productsResponse
+
+}

@@ -8,7 +8,7 @@ module.exports = {
     },
 
     Mutation: {
-        update: (_, {id, email}, context) => userServices.update(id, email, context)
+        update: (_, body, context) => userServices.update(body, context)
 
     }
 

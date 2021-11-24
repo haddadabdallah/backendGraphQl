@@ -2,7 +2,8 @@
 
 type User {
     email: String
-    password: String
+    role: Int
+    token: String
   }
 
   type Query {
@@ -13,18 +14,14 @@ type User {
      code:Int!
      Success:Boolean!
      message:String!
-    email: String
-    token: String
-    status: Boolean
+     user: User
   }
 
   type SignupResponse {
      code:Int!
-     Success:Boolean!
+     success:Boolean!
      message:String!
-     email: String
-     password: String
-     status: Boolean
+     user: User
   }
 
   type Mutation {

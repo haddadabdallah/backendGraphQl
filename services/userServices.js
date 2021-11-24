@@ -10,9 +10,11 @@ const index = async () => {
 
 }
 
-const show = async (id, { auth, user }) => {
+const show = async (id, { auth, user, role }) => {
 
     try {
+
+        console.log(role);
 
         if (auth) {
 
@@ -64,13 +66,13 @@ const show = async (id, { auth, user }) => {
 }
 
 
-const update = async (id, email, { auth, user }) => {
+const update = async (body, { auth, user }) => {
 
     try {
 
         if (auth) {
 
-            const result = await User.findByIdAndUpdate(id, { email: email }, { new: true })
+            const result = await User.findByIdAndUpdate(body.id, body, { new: true })
 
             if (result) {
 

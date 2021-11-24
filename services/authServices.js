@@ -24,22 +24,36 @@ const signup = async (email, password) => {
         const result = await auth.save()
 
         if (result) {
+            
+            
             return {
-                email: result.email,
-                password: result.password,
-                status: true
+                code: 200,
+                success: true,
+                message: "sucsses",
+                user: result
             }
+            
+
+
         } else {
-            throw Error('non signup user')
+            return {
+                code: 404,
+                success: false,
+                message: "user not added",
+                user: null
+            }
         }
 
 
     } catch (error) {
+   
         return {
-            email: null,
-            password: null,
-            status: false
+            code: 500,
+            success: false,
+            message: error.message,
+            products: null
         }
+
     }
 
 }
@@ -65,10 +79,17 @@ const login = async (email, password) => {
 
                     const update = await Token.findOneAndUpdate({ uid: user._id }, { token: token })
 
+                 
+  
                     return {
-                        email: user.email,
-                        token: token,
-                        status: true
+                        code: 200,
+                        success: true,
+                        message: "sucsses",
+                        user: {
+                            id: user._id,
+                            email: user.email,
+                            token: token
+                        }
                     }
 
 
@@ -82,10 +103,17 @@ const login = async (email, password) => {
 
                     const result = await sessionToken.save()
 
+                    const userInfo = {...user, token: token}
+
                     return {
-                        email: user.email,
-                        token: token,
-                        status: true
+                        code: 200,
+                        success: true,
+                        message: "sucsses",
+                        user: {
+                            id: user._id,
+                            email: user.email,
+                            token: token
+                        }
                     }
 
 
@@ -94,19 +122,22 @@ const login = async (email, password) => {
 
             } else {
                 return {
-                    email: null,
-                    token: null,
-                    status: false
+                    code: 404,
+                    success: false,
+                    message: "error auth user not found",
+                    user: null
                 }
             }
 
         }
 
     } catch (error) {
+        
         return {
-            email: null,
-            token: null,
-            status: false
+            code: 500,
+            success: false,
+            message: error.message,
+            products: null
         }
     }
 }

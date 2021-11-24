@@ -8,10 +8,13 @@ const schema = {
     }, password: {
         type: String,
         require: true
+    }, role: {
+        type: Number,
+        default: 1
     }, salt: {
         type: String,
         require: true
-    },reset_password: {
+    }, reset_password: {
         type: String,
         require: false
     }
