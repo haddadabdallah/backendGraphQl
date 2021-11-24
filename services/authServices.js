@@ -4,6 +4,8 @@ const crypto = require('crypto')
 var jwt = require('jsonwebtoken');
 const Token = require('../models/Token');
 
+const { JWT_KEY } = require('../config')
+
 const createHashedPassword = (salt, password) => {
     return hashedPassword = crypto
         .createHmac('sha1', salt)
@@ -70,7 +72,7 @@ const login = async (email, password) => {
 
             if (hashedPassword === user.password) {
 
-                const token = jwt.sign({ id: user._id }, 'amakey');
+                const token = jwt.sign({ id: user._id }, JWT_KEY);
 
 
                 const isToken = await Token.findOne({ uid: user._id })

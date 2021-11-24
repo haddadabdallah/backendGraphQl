@@ -2,12 +2,13 @@ var jwt = require('jsonwebtoken');
 const Token = require('../models/Token');
 const User = require('../models/User');
 
+const { JWT_KEY } = require('../config')
 
 exports.getUser = async (token) => {
 
     try {
 
-        const user = await jwt.verify(token, 'amakey');
+        const user = await jwt.verify(token, JWT_KEY);
 
 
         if (user) {
