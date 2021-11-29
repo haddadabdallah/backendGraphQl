@@ -1,32 +1,26 @@
 
 
-type User {
-    email: String
-    role: Int
-    token: String
-  }
+    type User {
+        email: String
+        role: Int
+    }
 
-  type Query {
-    users: [User]
-  }
+    type AuthPayload {
+        token: String
+        user: User
+    }
 
-   type LoginResponse {
-     code:Int!
-     Success:Boolean!
-     message:String!
-     user: User
-  }
+    type AuthResponse {
+        code:Int!
+        Success:Boolean!
+        message:String!
+        data: AuthPayload
+    }
 
-  type SignupResponse {
-     code:Int!
-     success:Boolean!
-     message:String!
-     user: User
-  }
+   
 
-  type Mutation {
-      signup(email: String, password: String) : SignupResponse
-      login(email: String, password:String) : LoginResponse
-  }
+    type Mutation {
+        signup(email: String, password: String) : AuthResponse
+        login(email: String, password:String) : AuthResponse
+    }
 
- 

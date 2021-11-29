@@ -1,20 +1,38 @@
+const { response } = require('../helper/response');
 const User = require('../models/User')
+
+
+// get all users 
 
 const index = async () => {
 
-    const result = await User.find()
 
-    if (result) {
-        return result
+    try {
+
+        const result = await User.find()
+
+        if (result) {
+
+            return response.success(result)
+
+        } else {
+            return response.notFound()
+        }
+
+    } catch (error) {
+
+        return response.unexpected(error)
+
     }
 
+
 }
+
+// get one user by id
 
 const show = async (id, { auth, user, role }) => {
 
     try {
-
-        console.log(role);
 
         if (auth) {
 
@@ -22,97 +40,72 @@ const show = async (id, { auth, user, role }) => {
 
             if (result) {
 
-                return {
-                    code: 200,
-                    status: true,
-                    message: 'Success',
-                    user: result
-                }
+                return response.success(result)
+
 
             } else {
 
-                return {
-                    code: 404,
-                    status: true,
-                    message: 'User not existe',
-                    user: null
-                }
+                return response.notFound()
+
+
 
             }
 
         } else {
 
-            return {
-                code: 401,
-                status: false,
-                message: 'User not Auth',
-                user: null
-            }
-
+            return response.unauthorized()
 
         }
 
     } catch (error) {
 
-        return {
-            code: 500,
-            status: false,
-            message: error.message,
-            user: null
-        }
+        return response.unexpected(error)
 
     }
 
 }
 
 
+// update user by id
+
 const update = async (body, { auth, user }) => {
 
     try {
 
+
         if (auth) {
 
-            const result = await User.findByIdAndUpdate(body.id, body, { new: true })
+            if (body.id !== user._id.toString()) {
+
+                return response.forbidden()
+
+            }
+
+            const result = await User.findByIdAndUpdate(body.id, {
+                email: body.email
+            }, { new: true })
 
             if (result) {
 
-                return {
-                    code: 200,
-                    status: true,
-                    message: 'Success',
-                    user: result
-                }
+                return response.success(result)
 
             } else {
 
-                return {
-                    code: 404,
-                    status: true,
-                    message: 'User not existe',
-                    user: result
-                }
+                return response.notFound()
 
             }
 
         } else {
 
-            return {
-                code: 401,
-                status: false,
-                message: "User not auth",
-                user: null
-            }
+            return response.unauthorized()
 
         }
+
+
 
     } catch (error) {
 
-        return {
-            code: 500,
-            status: false,
-            message: error.message,
-            user: null
-        }
+        return response.unexpected(error)
 
     }
 

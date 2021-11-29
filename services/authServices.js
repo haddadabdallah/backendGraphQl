@@ -3,8 +3,10 @@ const { v1: uuidv1 } = require('uuid');
 const crypto = require('crypto')
 var jwt = require('jsonwebtoken');
 const Token = require('../models/Token');
-
 const { JWT_KEY } = require('../config')
+const { response } = require('../helper/response');
+
+
 
 const createHashedPassword = (salt, password) => {
     return hashedPassword = crypto
@@ -26,35 +28,23 @@ const signup = async (email, password) => {
         const result = await auth.save()
 
         if (result) {
-            
-            
-            return {
-                code: 200,
-                success: true,
-                message: "sucsses",
+
+            const userResponse = {
                 user: result
             }
-            
 
+            return response.success(userResponse)
 
         } else {
-            return {
-                code: 404,
-                success: false,
-                message: "user not added",
-                user: null
-            }
+
+            throw Error("Bad Request")
+
         }
 
 
     } catch (error) {
-   
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            products: null
-        }
+
+        return response.unexpected(error)
 
     }
 
@@ -74,25 +64,22 @@ const login = async (email, password) => {
 
                 const token = jwt.sign({ id: user._id }, JWT_KEY);
 
-
                 const isToken = await Token.findOne({ uid: user._id })
 
                 if (isToken) {
 
                     const update = await Token.findOneAndUpdate({ uid: user._id }, { token: token })
 
-                 
-  
-                    return {
-                        code: 200,
-                        success: true,
-                        message: "sucsses",
+
+                    return response.success({
                         user: {
                             id: user._id,
                             email: user.email,
-                            token: token
-                        }
-                    }
+                        },
+                        token: token
+
+                    })
+
 
 
                 } else {
@@ -105,49 +92,40 @@ const login = async (email, password) => {
 
                     const result = await sessionToken.save()
 
-                    const userInfo = {...user, token: token}
 
-                    return {
-                        code: 200,
-                        success: true,
-                        message: "sucsses",
-                        user: {
-                            id: user._id,
-                            email: user.email,
+                    if (result) {
+
+                        return response.success({
+                            user: {
+                                id: user._id,
+                                email: user.email,
+                            },
                             token: token
-                        }
-                    }
 
+
+                        })
+
+                    }
 
                 }
 
 
             } else {
-                return {
-                    code: 404,
-                    success: false,
-                    message: "error auth user not found",
-                    user: null
-                }
+
+                throw Error("Bad Request")
+
             }
 
         }
 
     } catch (error) {
-        
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            products: null
-        }
+
+        return response.unexpected(error)
     }
 }
 
 
 const reset_password = async (email, token) => {
-
-    
 
 }
 

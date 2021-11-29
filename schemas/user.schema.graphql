@@ -1,26 +1,40 @@
 
 
 type User {
+
     email: String
     role: Int
+
 }
+
+  type usersResponce {
+
+    code: Int!
+    status: Boolean!
+    message: String!
+    data: [User]
+
+  }
 
   type userResponse {
 
     code: Int!
     status: Boolean!
     message: String!
-    user: User
+    data: User
     
-
   }
 
   type Query {
-    users: [User]
+
+    users: usersResponce
     user(id: String): userResponse
+
   }
 
 
   type Mutation {
+
       update(id:String, email:String, role: Int): userResponse
+      
   }

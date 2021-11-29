@@ -1,13 +1,36 @@
 const Categorie = require("../models/Categorie")
+const { response } = require('../helper/response');
 
+
+const allResource = async () => {
+
+    const allCategories = await Categorie.find()
+
+    return allCategories
+
+}
 
 const index = async () => {
 
-    return [{
-        name: "abdallah",
-        slug: "abdallah_web",
-        status: true
-    }]
+    try {
+
+        const reslut = await Categorie.find()
+
+        if (reslut.length) {
+
+            return response.success(reslut)
+
+        } else {
+
+            return response.notFound()
+
+        }
+
+    } catch (error) {
+
+        return response.unexpected(error)
+
+    }
 
 }
 
@@ -23,46 +46,23 @@ const sotre = async (body, { auth, user }) => {
 
             if (result) {
 
-                const allCategories = await Categorie.find()
-                console.log(allCategories);
-
-                return {
-                    code: 200,
-                    success: true,
-                    message: "sucsses",
-                    categories: allCategories
-                }
+                return response.success(await allResource())
 
             } else {
 
-                return {
-                    code: 404,
-                    success: true,
-                    message: "not found",
-                    categories: []
-                }
+                throw Error('Bad Request')
 
             }
 
         } else {
 
-            return {
-                code: 401,
-                success: false,
-                message: "user not auth",
-                categories: []
-            }
+            return response.unauthorized()
 
         }
 
     } catch (error) {
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            categories: []
-        }
+        return response.unexpected(error)
 
     }
 
@@ -79,45 +79,24 @@ const update = async (body, { auth, user }) => {
 
             if (result) {
 
-                const allCategories = await Categorie.find()
-
-                return {
-                    code: 200,
-                    success: true,
-                    message: "sucsses",
-                    categories: allCategories
-                }
+                return response.success(await allResource())
 
             } else {
-                return {
-                    code: 404,
-                    success: true,
-                    message: "not found",
-                    categories: []
-                }
+
+                throw Error('Bad Request')
+
             }
 
 
         } else {
 
-            return {
-                code: 401,
-                success: false,
-                message: "user not auth",
-                categories: []
-            }
+            return response.unauthorized()
 
         }
 
     } catch (error) {
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            categories: []
-        }
-
+        return response.unexpected(error)
 
     }
 
@@ -129,54 +108,29 @@ const remove = async (id, { auth, user }) => {
     try {
 
         if (auth) {
+
             const result = await Categorie.findByIdAndDelete({ _id: id })
 
             if (result) {
 
-                const allCategories = await Categorie.find()
-
-                return {
-                    code: 200,
-                    success: true,
-                    message: "sucsses",
-                    categories: allCategories
-                }
-
+                return response.success(await allResource())
 
             } else {
 
-
-                return {
-                    code: 404,
-                    success: true,
-                    message: "not found",
-                    categories: []
-                }
+                throw Error('Bad Request')
 
             }
 
         } else {
 
-
-            return {
-                code: 401,
-                success: false,
-                message: "user not auth",
-                categories: []
-            }
-
+            return response.unauthorized()
 
         }
 
 
     } catch (error) {
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            categories: []
-        }
+        return response.unexpected(error)
 
     }
 

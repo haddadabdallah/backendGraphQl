@@ -1,5 +1,17 @@
 const Product = require("../models/Product")
 const Categorie = require("../models/Categorie")
+const { response } = require('../helper/response');
+
+
+
+const allResource = async () => {
+
+    const allResource = await Product.find()
+
+    return allResource
+
+}
+
 
 
 const index = async ({ page = 1, categorie = "" }) => {
@@ -8,52 +20,31 @@ const index = async ({ page = 1, categorie = "" }) => {
 
         let query = {}
 
-        if(categorie){
+        if (categorie) {
 
-            const categorie_ = await Categorie.findOne({slug: categorie })
+            const categorie_ = await Categorie.findOne({ slug: categorie })
 
-            if(categorie_){
-                query = {...query, categorie : categorie_._id }
-            }else{
-
+            if (categorie_) {
+                query = { ...query, categorie: categorie_._id }
             }
-           
+
         }
 
         const result = await Product.find().limit(2).skip(2 * (page - 1)).populate('categorie')
 
         if (result.length) {
 
-            return {
-                code: 200,
-                success: true,
-                message: "sucsses",
-                products: result
-            }
-
+            return response.success(result)
 
         } else {
 
-
-            return {
-                code: 404,
-                success: false,
-                message: "product not found",
-                products: []
-            }
-
+            return response.notFound()
 
         }
 
     } catch (error) {
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            products: []
-        }
-
+        return response.unexpected(error)
 
     }
 
@@ -65,38 +56,33 @@ const show = async (id, { auth, user }) => {
 
     try {
 
-        const result = await Product.findOne({ _id: id }).populate('categorie')
+        if (auth) {
 
-        if (result) {
 
-            return {
-                code: 200,
-                success: true,
-                message: "sucsses",
-                product: result
+            const result = await Product.findOne({ _id: id }).populate('categorie')
+
+            if (result) {
+
+                return response.success(result)
+
+
+            } else {
+
+                return response.notFound()
+
             }
+
 
         } else {
 
-            return {
-                code: 404,
-                success: false,
-                message: "product not found",
-                products: []
-            }
-
+            return response.unauthorized()
 
         }
 
 
     } catch (error) {
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            products: null
-        }
+        return response.unexpected(error)
 
     }
 
@@ -109,51 +95,26 @@ const store = async (body, { auth, user }) => {
 
         if (auth) {
 
-            const product = new Product(body)
-
-            const result = await product.save()
-
-
+            const result = await Product.create(body)
 
             if (result) {
 
-                const allProduct = await Product.find()
-
-                return {
-                    code: 200,
-                    success: true,
-                    message: "sucsses",
-                    products: allProduct
-                }
-
+                return response.success(await allResource())
 
             } else {
 
-                return {
-                    code: 404,
-                    success: false,
-                    message: "product not added",
-                    products: []
-                }
+                throw Error('Bad Request')
 
             }
+
+
         } else {
-            return {
-                code: 401,
-                success: false,
-                message: "user not auth",
-                products: []
-            }
+            return response.unauthorized()
         }
 
     } catch (error) {
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            products: []
-        }
+        return response.unexpected(error)
 
     }
 
@@ -166,53 +127,27 @@ const update = async (body, { auth, user }) => {
 
         if (auth) {
 
-
-
             const result = await Product.findByIdAndUpdate({ _id: body.id }, body, { new: true })
 
             if (result) {
 
-
-                const allProduct = await Product.find()
-
-                return {
-                    code: 200,
-                    success: true,
-                    message: "sucsses",
-                    products: allProduct
-                }
+                return response.success(await allResource())
 
             } else {
-                return {
-                    code: 404,
-                    success: false,
-                    message: "product not updated",
-                    products: []
-                }
 
+                throw Error('Bad Request')
 
             }
 
         } else {
 
-            return {
-                code: 401,
-                success: false,
-                message: "user not auth",
-                products: []
-            }
-
+            return response.unauthorized()
         }
 
     } catch (error) {
 
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            products: []
-        }
+        return response.unexpected(error)
 
     }
 
@@ -229,46 +164,25 @@ const remove = async (id, { auth, user }) => {
 
             if (result) {
 
-                const allProduct = await Product.find()
+                return response.success(await allResource())
 
-                return {
-                    code: 200,
-                    success: true,
-                    message: "sucsses",
-                    products: allProduct
-                }
 
             } else {
 
-                return {
-                    code: 404,
-                    success: false,
-                    message: "product not deleted",
-                    products: []
-                }
+                throw Error('Bad Request')
 
             }
 
 
         } else {
 
-            return {
-                code: 401,
-                success: false,
-                message: "user not auth",
-                products: []
-            }
+            return response.unauthorized()
 
         }
 
     } catch (error) {
 
-        return {
-            code: 500,
-            success: false,
-            message: error.message,
-            products: []
-        }
+        return response.unexpected(error)
 
     }
 

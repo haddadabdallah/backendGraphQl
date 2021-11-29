@@ -12,7 +12,7 @@ type productsResponse  {
     code: Int
     success: Boolean
     message: String
-    products: [product]
+    data: [product]
 }
 
 type productResponse  {
@@ -20,7 +20,7 @@ type productResponse  {
     code: Int
     success: Boolean
     message: String
-    product: product
+    data: product
 }
 
 

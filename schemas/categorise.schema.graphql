@@ -6,16 +6,18 @@ type categorie {
     status: Boolean
 }
 
-type Query {
-    categorises: [categorie]
-}
-
 type categorieResponse  {
     code: Int
     success: Boolean
     message: String
-    categories: [categorie]
+    data: [categorie]
 }
+
+type Query {
+    categorises: categorieResponse
+}
+
+
 
 type Mutation {
 
