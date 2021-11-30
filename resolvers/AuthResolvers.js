@@ -1,9 +1,12 @@
 
-const {authServices} = require('../services')
+const { authServices } = require('../services')
+
+
+
 
 module.exports = {
 
-  
+
 
     Query: {
         users: () => []
@@ -11,7 +14,8 @@ module.exports = {
 
     Mutation: {
         signup: (_, { email, password }) => authServices.signup(email, password),
-        login:(_,{email, password}) => authServices.login(email, password)
+        login: (_, { email, password }) => authServices.login(email, password),
+        checkAuth: (_, body ,context) => authServices.checkAuth(body, context)
     }
 
 }

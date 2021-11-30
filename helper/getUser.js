@@ -13,7 +13,7 @@ exports.getUser = async (token) => {
 
         if (user) {
 
-            const user_result = await User.findOne({_id: user.id })
+            const user_result = await User.findOne({ _id: user.id })
             const result = await Token.findOne({ token: token, status: true })
 
             if (result) {

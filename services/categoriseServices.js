@@ -39,26 +39,22 @@ const sotre = async (body, { auth, user }) => {
 
     try {
 
-        if (auth) {
 
-            const categorise = new Categorie(body)
-            const result = await categorise.save()
 
-            if (result) {
+        const categorise = new Categorie(body)
+        const result = await categorise.save()
 
-                return response.success(await allResource())
+        if (result) {
 
-            } else {
-
-                throw Error('Bad Request')
-
-            }
+            return response.success(await allResource())
 
         } else {
 
-            return response.unauthorized()
+            throw Error('Bad Request')
 
         }
+
+
 
     } catch (error) {
 
@@ -73,26 +69,22 @@ const update = async (body, { auth, user }) => {
 
     try {
 
-        if (auth) {
 
-            const result = await Categorie.findByIdAndUpdate({ _id: body.id }, body, { new: true })
 
-            if (result) {
+        const result = await Categorie.findByIdAndUpdate({ _id: body.id }, body, { new: true })
 
-                return response.success(await allResource())
+        if (result) {
 
-            } else {
-
-                throw Error('Bad Request')
-
-            }
-
+            return response.success(await allResource())
 
         } else {
 
-            return response.unauthorized()
+            throw Error('Bad Request')
 
         }
+
+
+
 
     } catch (error) {
 
@@ -107,25 +99,20 @@ const remove = async (id, { auth, user }) => {
 
     try {
 
-        if (auth) {
 
-            const result = await Categorie.findByIdAndDelete({ _id: id })
+        const result = await Categorie.findByIdAndDelete({ _id: id })
 
-            if (result) {
+        if (result) {
 
-                return response.success(await allResource())
-
-            } else {
-
-                throw Error('Bad Request')
-
-            }
+            return response.success(await allResource())
 
         } else {
 
-            return response.unauthorized()
+            throw Error('Bad Request')
 
         }
+
+
 
 
     } catch (error) {

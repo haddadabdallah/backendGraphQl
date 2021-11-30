@@ -6,7 +6,6 @@ const User = require('../models/User')
 
 const index = async () => {
 
-
     try {
 
         const result = await User.find()
@@ -25,35 +24,24 @@ const index = async () => {
 
     }
 
-
 }
 
-// get one user by id
+
 
 const show = async (id, { auth, user, role }) => {
 
     try {
 
-        if (auth) {
+        const result = await User.findOne({ _id: id })
 
-            const result = await User.findOne({ _id: id })
+        if (result) {
 
-            if (result) {
+            return response.success(result)
 
-                return response.success(result)
-
-
-            } else {
-
-                return response.notFound()
-
-
-
-            }
 
         } else {
 
-            return response.unauthorized()
+            return response.notFound()
 
         }
 
@@ -72,36 +60,25 @@ const update = async (body, { auth, user }) => {
 
     try {
 
+        if (body.id !== user._id.toString()) {
 
-        if (auth) {
-
-            if (body.id !== user._id.toString()) {
-
-                return response.forbidden()
-
-            }
-
-            const result = await User.findByIdAndUpdate(body.id, {
-                email: body.email
-            }, { new: true })
-
-            if (result) {
-
-                return response.success(result)
-
-            } else {
-
-                return response.notFound()
-
-            }
-
-        } else {
-
-            return response.unauthorized()
+            return response.forbidden()
 
         }
 
+        const result = await User.findByIdAndUpdate(body.id, {
+            email: body.email
+        }, { new: true })
 
+        if (result) {
+
+            return response.success(result)
+
+        } else {
+
+            return response.notFound()
+
+        }
 
     } catch (error) {
 
@@ -113,7 +90,6 @@ const update = async (body, { auth, user }) => {
 
 
 const userServices = {
-
     index,
     show,
     update

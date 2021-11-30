@@ -124,6 +124,28 @@ const login = async (email, password) => {
     }
 }
 
+const checkAuth = async (token, {auth, user}) => {
+
+
+    if(auth){
+
+        return response.success({
+            user: {
+                id: user._id,
+                email: user.email,
+            },
+        })
+
+    }else{
+
+        return response.unauthorized()
+
+    }
+   
+
+
+
+}
 
 const reset_password = async (email, token) => {
 
@@ -132,6 +154,7 @@ const reset_password = async (email, token) => {
 const authServices = {
     signup,
     login,
+    checkAuth,
     reset_password
 }
 

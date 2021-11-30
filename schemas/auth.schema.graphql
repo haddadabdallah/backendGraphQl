@@ -12,15 +12,15 @@
 
     type AuthResponse {
         code:Int!
-        Success:Boolean!
+        status:Boolean!
         message:String!
         data: AuthPayload
     }
 
    
-
     type Mutation {
         signup(email: String, password: String) : AuthResponse
         login(email: String, password:String) : AuthResponse
+        checkAuth(token: String): AuthResponse
     }
 

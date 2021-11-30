@@ -12,38 +12,37 @@ const productSchema = readFileSync('./schemas/product.schema.graphql').toString(
 const typeDefs = [authSchema, userSchema, categoriseSchema, productSchema]
 const resolvers = [AuthResolvers, UserResolvers, CategoriseResolvers, ProductResolvers]
 
-const {ApolloServerPluginLandingPageGraphQLPlayground} = require('apollo-server-core')
+const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core')
 
 
 
 try {
 
 
-  
-const server = new ApolloServer({
-  typeDefs, resolvers, introspection: true, playground: true, context: async ({ req }) => {
 
-    const token = req.headers.authorization || '';
+  const server = new ApolloServer({
 
-    const user = await getUser(token);
+      typeDefs, resolvers, introspection: true, playground: true, context: async ({ req }) => {
 
-    
-    return { auth: user.auth  , user: user.user, role: user.role }
+      const token = req.headers.authorization || '';
 
+      const user = await getUser(token);
 
-  }
-});
+      return { auth: user.auth, user: user.user, role: user.role, token }
 
+    }
+  });
 
 
-connectDb()
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+  connectDb()
+
+  server.listen().then(({ url }) => {
+    console.log(`🚀  Server ready at ${url}`);
+  });
 
 
-  
+
 } catch (error) {
-    console.log(error);
+  console.log(error);
 }
