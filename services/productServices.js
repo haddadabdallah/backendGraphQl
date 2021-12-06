@@ -1,6 +1,7 @@
 const Product = require("../models/Product")
 const Categorie = require("../models/Categorie")
 const { response } = require('../helper/response');
+const User = require("../models/User");
 
 
 
@@ -14,11 +15,24 @@ const allResource = async () => {
 
 
 
-const index = async ({ page = 1, categorie = "" }) => {
+const index = async ({ page = 1, categorie = "", userId = "" }, { auth, user }) => {
+
+    console.log(userId);
 
     try {
 
+
         let query = {}
+
+        if (userId) {
+
+            const getUserId = await User.findOne({ username: userId })
+
+            if (getUserId) {
+                query = { ...query, user: getUserId._id }
+            }
+
+        }
 
         if (categorie) {
 
@@ -30,7 +44,8 @@ const index = async ({ page = 1, categorie = "" }) => {
 
         }
 
-        const result = await Product.find().limit(2).skip(2 * (page - 1)).populate('categorie')
+        const result = await Product.find(query).limit(10).skip(10 * (page - 1)).populate('categorie').populate('user')
+
 
         if (result.length) {
 
@@ -81,9 +96,13 @@ const store = async (body, { auth, user }) => {
 
     try {
 
+        const post = {
+            name: body.name,
+            user: user._id,
+            content: body.content
+        }
 
-
-        const result = await Product.create(body)
+        const result = await Product.create(post)
 
         if (result) {
 
@@ -94,9 +113,6 @@ const store = async (body, { auth, user }) => {
             throw Error('Bad Request')
 
         }
-
-
-
 
     } catch (error) {
 

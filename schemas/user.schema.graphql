@@ -1,10 +1,10 @@
 
 
 type User {
-
+    _id: String
     email: String
     role: Int
-
+    username: String
 }
 
   type usersResponce {

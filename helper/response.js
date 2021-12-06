@@ -10,7 +10,7 @@ const json = (status = true, code = 200, message = "", data) => {
         message: message,
         data: data
     }
-
+    
 }
 
 
@@ -32,7 +32,7 @@ const notFound = () => {
         code: 404,
         status: false,
         message: "The requested resource was not found",
-        data: null
+        data: []
     }
 
 }

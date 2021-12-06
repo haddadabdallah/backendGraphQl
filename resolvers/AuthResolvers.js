@@ -13,7 +13,7 @@ module.exports = {
     },
 
     Mutation: {
-        signup: (_, { email, password }) => authServices.signup(email, password),
+        signup: (_, { email, username, password }) => authServices.signup(email, username, password),
         login: (_, { email, password }) => authServices.login(email, password),
         checkAuth: (_, body ,context) => authServices.checkAuth(body, context)
     }

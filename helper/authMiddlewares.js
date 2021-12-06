@@ -1,4 +1,5 @@
 const { response } = require("./response");
+const { ApolloError  } = require('apollo-server-errors')
 
 const isAuth = (context, next) => {
 
@@ -7,6 +8,7 @@ const isAuth = (context, next) => {
         if (context.auth) {
             return next
         }
+        
 
         return response.unauthorized()
 
@@ -28,6 +30,7 @@ const isAdmin = (context, next) => {
             
         }
 
+        
         return response.forbidden()
 
     } catch (error) {

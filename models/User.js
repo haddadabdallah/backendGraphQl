@@ -14,6 +14,9 @@ const schema = {
     }, salt: {
         type: String,
         require: true
+    },username:{
+        type: String,
+        require: true
     }, reset_password: {
         type: String,
         require: false

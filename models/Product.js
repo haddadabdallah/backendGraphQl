@@ -20,6 +20,13 @@ const schema = {
         type:  mongoose.Types.ObjectId,
         ref: 'Categorie',
         require: true
+    }, user: {
+        type:  mongoose.Types.ObjectId,
+        ref: 'User',
+        require: true
+    }, content: {
+        type: String,
+        require: true
     }
 
 }

@@ -16,7 +16,7 @@ const createHashedPassword = (salt, password) => {
 }
 
 
-const signup = async (email, password) => {
+const signup = async (email, username,  password) => {
 
     try {
 
@@ -24,7 +24,7 @@ const signup = async (email, password) => {
         const hashedPassword = createHashedPassword(salt, password)
 
 
-        const auth = new User({ email, password: hashedPassword, salt: salt })
+        const auth = new User({ email, password: hashedPassword, salt: salt, username })
         const result = await auth.save()
 
         if (result) {
@@ -124,16 +124,16 @@ const login = async (email, password) => {
     }
 }
 
-const checkAuth = async (token, {auth, user}) => {
-
+const checkAuth = async (token_, {auth, user, token}) => {
 
     if(auth){
 
         return response.success({
             user: {
-                id: user._id,
+                _id: user._id,
                 email: user.email,
-            },
+                username: user.username
+            },token: token
         })
 
     }else{

@@ -1,8 +1,10 @@
 
 
     type User {
+        _id: String
         email: String
         role: Int
+        username: String
     }
 
     type AuthPayload {
@@ -19,7 +21,7 @@
 
    
     type Mutation {
-        signup(email: String, password: String) : AuthResponse
+        signup(email: String, username: String, password: String) : AuthResponse
         login(email: String, password:String) : AuthResponse
         checkAuth(token: String): AuthResponse
     }

@@ -5,12 +5,12 @@ const middlewares = require('../helper/authMiddlewares')
 module.exports = {
 
     Query: {
-        products: (_, body) => productServices.index(body),
+        products: (_, body, context) => middlewares.isAuth(context, productServices.index(body, context)) ,
         product: (_, { id }, context) => middlewares.isAuth(context, productServices.show(id, context))
     },
 
     Mutation: {
-        addProduct: (_, body, context) => middlewares.isAdmin(context, productServices.store(body, context)),
+        addProduct: (_, body, context) => middlewares.isAuth(context, productServices.store(body, context)),
         updateProduct: (_, body, context) => middlewares.isAuth(context, productServices.update(body, context)),
         deleteProduct: (_, { id }, context) => middlewares.isAuth(context, productServices.remove(id, context))
     }

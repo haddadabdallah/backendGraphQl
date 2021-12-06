@@ -1,24 +1,33 @@
+type User {
+    _id: String
+    email: String
+    role: Int
+    username: String
+}
+
 type product {
-    id: String
+    _id: String
     name: String
     slug: String
     photo: String
     prix: String
+    content: String
     categorie: categorie
+    user: User
 }
 
 type productsResponse  {
-    id: String
+    _id: String
     code: Int
-    success: Boolean
+    status: Boolean
     message: String
     data: [product]
 }
 
 type productResponse  {
-    id: String
+    _id: String
     code: Int
-    success: Boolean
+    status: Boolean
     message: String
     data: product
 }
@@ -26,15 +35,15 @@ type productResponse  {
 
 
 type Query {
-    products(page:Int, categorie: String ): productsResponse
+    products(page:Int, categorie: String, userId: String ): productsResponse
     product(id:String): productResponse
 }
 
 
 type Mutation {
    
-    addProduct(id: String, name: String,slug: String, photo:String, prix:String, categorie:String) : productsResponse,
-    updateProduct(id: String, name: String,slug: String, photo:String, prix:String, categorie:String) : productsResponse
+    addProduct(id: String, name: String, slug: String, content: String, photo:String, prix:String, categorie:String, user:String) : productsResponse,
+    updateProduct(id: String, name: String,slug: String,content: String, photo:String, prix:String, categorie:String) : productsResponse
     deleteProduct(id: String,) : productsResponse
 
 }
